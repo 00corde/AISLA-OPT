@@ -274,7 +274,7 @@ fill="{paleta.texto_secundario}">{grados(perfil['cara_interior_aislante'])}</tex
 fill="{paleta.texto}">{grados(perfil['aire_interior'])}</text>
   <line x1="{x_pared_ext - 50}" y1="{alto - 12}" x2="{x_pared_int + 50}" y2="{alto - 12}" stroke="{paleta.calor}"
         stroke-width="2" marker-end="url(#punta)"/>
-  <text x="{centro}" y="{alto - 22}" font-size="12.5" fill="{paleta.calor}" text-anchor="middle" font-weight="600">\
+  <text x="{centro}" y="{alto - 34}" font-size="12.5" fill="{paleta.calor}" text-anchor="middle" font-weight="600">\
 Flujo de calor {flujo} W/m²</text>
 </svg>
 <figcaption>Perfil de temperatura en las paredes en condición crítica. La mayor caída ocurre dentro del \
