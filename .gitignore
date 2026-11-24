@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Herramientas
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Editores y sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Salidas locales
+*.xlsx
+escenario_*.json
+.streamlit/secrets.toml

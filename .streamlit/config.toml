@@ -1,0 +1,32 @@
+# Identidad visual de AISLA-OPT: escarcha, pizarra y azul glaciar.
+[client]
+toolbarMode = "minimal"
+
+[theme]
+# Colores por modo en [theme.light] y [theme.dark]; la app sigue la preferencia del sistema.
+baseRadius = "6px"
+font = "Barlow:https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap"
+headingFont = "'Barlow Semi Condensed':https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&display=swap"
+showWidgetBorder = true
+
+[theme.dark]
+primaryColor = "#46A9C9"
+backgroundColor = "#0F1B21"
+secondaryBackgroundColor = "#172832"
+textColor = "#E3ECEF"
+borderColor = "#2A3F4A"
+linkColor = "#46A9C9"
+
+[theme.dark.sidebar]
+backgroundColor = "#14232B"
+
+[theme.light]
+primaryColor = "#0E6E8C"
+backgroundColor = "#F3F6F7"
+secondaryBackgroundColor = "#E6EDF0"
+textColor = "#172A33"
+borderColor = "#C9D6DC"
+linkColor = "#0E6E8C"
+
+[theme.light.sidebar]
+backgroundColor = "#E6EDF0"
