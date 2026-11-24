@@ -204,13 +204,14 @@ def desglose(df: pd.DataFrame, paleta: Paleta) -> alt.Chart:
 # --------------------------------------------------------------------------- #
 def seccion_pared_svg(perfil: dict[str, float], espesor_mm: float, nombre_material: str, paleta: Paleta) -> str:
     """Corte de la pared con el perfil de temperatura real (exterior a la izquierda)."""
-    ancho, alto = 470, 240
+    ancho, alto = 470, 262
+    fondo_zonas = alto - 50  # franja inferior reservada para la flecha de flujo
     x_aire_ext, x_pared_ext = 14, 120
     grosor = max(56, min(200, 1.2 * espesor_mm))
     x_pared_int = x_pared_ext + grosor
     x_aire_int = ancho - 18
     capa = 16  # capa límite (película) dibujada a cada lado de la pared
-    arriba, abajo = 46, alto - 44
+    arriba, abajo = 46, fondo_zonas - 24
 
     temps = [perfil["aire_exterior"], perfil["superficie_exterior"], perfil["cara_interior_aislante"],
              perfil["aire_interior"]]
@@ -252,9 +253,10 @@ def seccion_pared_svg(perfil: dict[str, float], espesor_mm: float, nombre_materi
       <path d="M0,0 L10,5 L0,10 z" fill="{paleta.calor}"/>
     </marker>
   </defs>
-  <rect x="0" y="22" width="{x_pared_ext}" height="{alto - 44}" fill="{paleta.calor}" opacity=".08"/>
-  <rect x="{x_pared_int}" y="22" width="{ancho - x_pared_int}" height="{alto - 44}" fill="{paleta.frio}" opacity=".85"/>
-  <rect x="{x_pared_ext}" y="22" width="{grosor}" height="{alto - 44}" fill="url(#espuma)"
+  <rect x="0" y="22" width="{x_pared_ext}" height="{fondo_zonas - 22}" fill="{paleta.calor}" opacity=".08"/>
+  <rect x="{x_pared_int}" y="22" width="{ancho - x_pared_int}" height="{fondo_zonas - 22}"
+        fill="{paleta.frio}" opacity=".85"/>
+  <rect x="{x_pared_ext}" y="22" width="{grosor}" height="{fondo_zonas - 22}" fill="url(#espuma)"
         stroke="{paleta.texto_secundario}" stroke-width="1.5"/>
   <text x="10" y="15" font-size="13" fill="{paleta.calor}" font-weight="600">Exterior</text>
   <text x="{ancho - 10}" y="15" font-size="13" fill="{paleta.texto}" font-weight="600" text-anchor="end">Interior</text>
@@ -270,9 +272,9 @@ fill="{paleta.texto_secundario}">{grados(perfil['superficie_exterior'])}</text>
 fill="{paleta.texto_secundario}">{grados(perfil['cara_interior_aislante'])}</text>
   <text x="{x_aire_int}" y="{y(perfil['aire_interior']) + 20:.1f}" font-size="13" text-anchor="end" \
 fill="{paleta.texto}">{grados(perfil['aire_interior'])}</text>
-  <line x1="{x_pared_ext - 50}" y1="{alto - 10}" x2="{x_pared_int + 50}" y2="{alto - 10}" stroke="{paleta.calor}"
+  <line x1="{x_pared_ext - 50}" y1="{alto - 12}" x2="{x_pared_int + 50}" y2="{alto - 12}" stroke="{paleta.calor}"
         stroke-width="2" marker-end="url(#punta)"/>
-  <text x="{centro}" y="{alto - 16}" font-size="12.5" fill="{paleta.calor}" text-anchor="middle" font-weight="600">\
+  <text x="{centro}" y="{alto - 22}" font-size="12.5" fill="{paleta.calor}" text-anchor="middle" font-weight="600">\
 Flujo de calor {flujo} W/m²</text>
 </svg>
 <figcaption>Perfil de temperatura en las paredes en condición crítica. La mayor caída ocurre dentro del \
