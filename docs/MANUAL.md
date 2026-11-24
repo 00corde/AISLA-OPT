@@ -1,7 +1,7 @@
-# AISLA-OPT V4.4 — Manual de usuario y alcance técnico
+# AISLA-OPT — Manual de usuario y alcance técnico
 
-**Estado:** código cerrado y verificado  
-**Versión:** V4.4  
+**Versión:** 4.5  
+**Estado:** modelo validado (V1–V7); la V4.5 agrega análisis y mejoras de interfaz sin cambiar el modelo físico  
 **Propósito del documento:** explicar qué resuelve AISLA-OPT, cómo funciona el modelo, cómo usar la interfaz y cómo interpretar correctamente los resultados.
 
 ---
@@ -72,7 +72,7 @@ AISLA-OPT considera:
 
 ### Fuera del alcance
 
-La versión V4.4 no modela explícitamente:
+La versión 4.5 no modela explícitamente:
 
 - infiltración por apertura de puertas;
 - humedad o carga latente;
@@ -117,7 +117,7 @@ AISLA-OPT utiliza estas áreas exteriores de referencia de forma constante duran
 
 ### Limitación geométrica
 
-Al aumentar el espesor, una formulación geométrica más refinada podría considerar factores de forma o áreas medias. La V4.4 mantiene el área exterior fija para conservar un modelo simple y reproducible. Esta aproximación tiende a ser conservadora para la transmisión, especialmente a espesores altos.
+Al aumentar el espesor, una formulación geométrica más refinada podría considerar factores de forma o áreas medias. El modelo mantiene el área exterior fija para conservar un modelo simple y reproducible. Esta aproximación tiende a ser conservadora para la transmisión, especialmente a espesores altos.
 
 ---
 
@@ -151,7 +151,7 @@ La carga total por transmisión es la suma de paredes, techo y piso.
 
 Los coeficientes `h` de la interfaz son **parámetros efectivos de película editables**.
 
-Los valores por defecto de V4.4 son:
+Los valores por defecto son:
 
 - `h interior = 9.1 W/m²·K`;
 - `h exterior paredes = 9.1 W/m²·K`;
@@ -186,7 +186,7 @@ AISLA-OPT **no implementa un modelo detallado de conducción acoplada al terreno
 
 ## 7. Propiedades térmicas de los materiales
 
-La fuente técnica base utilizada por la V4.4 es:
+La fuente técnica base es:
 
 **ASHRAE Handbook—Refrigeration 2026, Chapter 24, Table 1: Thermal Conductivity of Cold Storage Insulation.**
 
@@ -277,7 +277,7 @@ Este resultado sigue representando únicamente transmisión por la envolvente.
 
 La casilla:
 
-> **Aplicar restricción de capacidad disponible para transmisión**
+> **Limitar por capacidad disponible para transmisión**
 
 está desactivada por defecto.
 
@@ -339,7 +339,7 @@ Sin una restricción de capacidad activa, AISLA-OPT **no inventa un espesor mín
 
 ## 12. Sistemas comerciales separados
 
-La V4.4 distingue dos categorías.
+AISLA-OPT distingue dos categorías.
 
 ### Panel frigorífico completo
 
@@ -413,16 +413,15 @@ Por ello, diferentes espesores del mismo producto pueden coexistir sin sobrescri
 
 ### Precio por otras unidades
 
-Si un proveedor cotiza por:
+El formulario acepta el precio en tres formas:
 
-- panel;
-- lámina;
-- metro lineal;
-- paquete;
+- por metro cuadrado (CRC/m²);
+- por lámina o panel, indicando ancho y largo en metros;
+- por paquete, indicando además las unidades por paquete.
 
-el precio debe convertirse a CRC/m² **solo cuando las dimensiones necesarias estén documentadas**.
-
-No debe inventarse un factor de conversión.
+AISLA-OPT convierte a CRC/m² con esas dimensiones. Use **solo dimensiones documentadas** por el proveedor;
+no debe inventarse un factor de conversión. Los precios por metro lineal deben convertirse manualmente con el
+ancho útil documentado.
 
 ---
 
@@ -446,7 +445,7 @@ Esto es importante porque una diferencia tributaria puede cambiar cuál alternat
 
 ## 16. Actualización opcional de precios web
 
-La consulta automática disponible en V4.4 corresponde a EPS dentro de la categoría **Aislante independiente**.
+La consulta automática disponible corresponde a EPS dentro de la categoría **Aislante independiente**.
 
 Esta función:
 
@@ -572,6 +571,48 @@ Si el mínimo aparece entre los extremos del catálogo, la conclusión económic
 
 ---
 
+## 19b. Análisis complementarios (V4.5)
+
+### Sensibilidad
+
+La pestaña **Sensibilidad** mueve cada supuesto hacia abajo y hacia arriba (por defecto ±20 %): tarifa
+eléctrica, COP, precio del aislamiento, vida útil y tasa de descuento. El gráfico de tornado muestra cuánto
+cambia el costo total de la mejor alternativa y la tabla indica si la mejor alternativa cambia en algún extremo.
+
+El **barrido de un parámetro** traza el costo total de las cinco mejores alternativas a lo largo de un rango.
+Donde dos curvas se cruzan, cambia la decisión.
+
+### Inversión por espesor
+
+Para un material, compara cada espesor con presencia comercial contra el siguiente más grueso, tomando el
+producto de menor precio en cada espesor:
+
+`VPN incremental = Δahorro_energía,anual × FVP − Δcosto_aislamiento`
+
+Un VPN positivo indica que el paso al espesor mayor se paga dentro de la vida útil. También se informa la
+recuperación simple `Δcosto / Δahorro anual`.
+
+### Perfil de temperatura
+
+El corte de pared de la pestaña **Resultado** usa la misma red de resistencias del modelo. Como el flujo por
+unidad de área es igual en todas las capas, cada salto de temperatura es proporcional a su resistencia:
+
+`q'' = (T_ext − T_int) / R''_total`  `ΔT_capa = q'' × R''_capa`
+
+### Escenarios y reporte
+
+- **Escenario JSON:** guarda todas las entradas para reproducir el caso o compartirlo.
+- **Comparación de escenarios:** agrega el caso actual a una tabla de la sesión para compararlo con otros.
+- **Reporte Excel:** resumen, entradas, alternativas, límites por capacidad, sensibilidad, inversión por
+  espesor, advertencias y catálogo usado.
+
+### Plantillas
+
+Las plantillas son puntos de partida editables: conservación a 5 °C (valores iniciales) y congelación a
+−18 °C (COP 1,8). No sustituyen los datos de diseño del proyecto.
+
+---
+
 ## 20. Gráficas y resultados principales
 
 La interfaz puede mostrar:
@@ -658,14 +699,19 @@ Para IVA y condiciones comerciales se recomienda usar explícitamente `No indica
 
 ---
 
-## 22. Validación de la V4.4
+## 22. Validación
 
-El archivo `pruebas_validacion.py` contiene **siete pruebas**.
+El archivo `tests/test_validacion.py` contiene las **siete pruebas** de validación. El resto de `tests/`
+cubre catálogo, análisis, escenarios, reporte y una ejecución completa de la interfaz.
 
 Ejecutar:
 
 ```bash
-py pruebas_validacion.py
+python -m pip install -r requirements-dev.txt
+```
+
+```bash
+pytest
 ```
 
 ### V1 — Cálculo manual base
@@ -727,9 +773,9 @@ También comprueba que se conserven condiciones comerciales relevantes durante l
 
 ### Estado de validación
 
-La V4.4 fue verificada con:
+La versión 4.5 fue verificada con:
 
-`V1–V7: 7/7 aprobadas`
+`V1–V7: 7/7 aprobadas` y resultados idénticos a la V4.4 en los escenarios de regresión.
 
 Además, una auditoría externa de regresión ejecutó la aplicación en distintos escenarios sin encontrar excepciones críticas ni importantes.
 
@@ -737,12 +783,13 @@ Además, una auditoría externa de regresión ejecutó la aplicación en distint
 
 ## 23. Requisitos de software
 
-La V4.4 fija las versiones principales probadas:
+Las versiones principales probadas están en `requirements.txt`:
 
 ```text
 streamlit==1.67.0
 pandas==3.0.6
-matplotlib>=3.8,<4
+altair>=5.4,<7
+openpyxl>=3.1,<4
 requests>=2.31,<3
 beautifulsoup4>=4.12,<5
 ```
@@ -764,7 +811,7 @@ py --version
 Ubíquese en la carpeta que contiene los archivos del proyecto y ejecute:
 
 ```bash
-py -m pip install -r requirements_aisla_opt.txt
+py -m pip install -r requirements.txt
 ```
 
 ---
@@ -774,10 +821,10 @@ py -m pip install -r requirements_aisla_opt.txt
 Desde la carpeta del proyecto:
 
 ```bash
-py -m streamlit run app_aisla_opt.py
+py -m streamlit run app.py
 ```
 
-Streamlit abrirá la interfaz en el navegador.
+Streamlit abrirá la interfaz en el navegador. En Linux o macOS use `python3` en lugar de `py`.
 
 ---
 
@@ -795,10 +842,12 @@ Streamlit abrirá la interfaz en el navegador.
 10. Registrar cotizaciones documentadas si es necesario.
 11. Verificar `k`, IVA y condición del precio.
 12. Activar la restricción de capacidad únicamente si existe un valor de capacidad disponible específicamente para transmisión.
-13. Ejecutar **Calcular y seleccionar**.
+13. Revisar la pestaña **Resultado**: los cálculos se actualizan solos con cada cambio.
 14. Interpretar primero la parte térmica.
 15. Interpretar después la comparación comercial.
-16. Finalmente revisar el costo de ciclo de vida y las advertencias del catálogo.
+16. Revisar el costo de ciclo de vida y las advertencias del catálogo.
+17. Comprobar la robustez en **Sensibilidad** e **Inversión por espesor**.
+18. Descargar el reporte Excel y el escenario JSON para el informe.
 
 ---
 
@@ -910,7 +959,7 @@ Por tanto, la herramienta es generalizable aunque el caso de estudio final se re
 
 ## 31. Datos pendientes para el caso de estudio final
 
-El código V4.4 está cerrado, pero la calidad del caso económico final depende de los datos ingresados.
+El modelo está validado, pero la calidad del caso económico final depende de los datos ingresados.
 
 Antes de redactar resultados definitivos conviene disponer de:
 
@@ -945,11 +994,13 @@ La diferencia debe explicarse como consecuencia de distintas fuentes y condicion
 
 ---
 
-## 33. Estado final de la V4.4
+## 33. Estado de la versión
 
-La V4.4 se considera **código cerrado**.
+La V4.4 cerró el modelo físico tras la auditoría final. La V4.5 reorganizó el código, agregó los análisis
+de la sección 19b y renovó la interfaz sin modificar ecuaciones ni resultados. Los cambios están en
+`CHANGELOG.md`.
 
-La auditoría final confirmó:
+La auditoría de la V4.4 confirmó:
 
 - N1–N7 resueltos;
 - V1–V7 aprobadas;
@@ -966,7 +1017,8 @@ A partir de esta versión, el trabajo restante pertenece a:
 - informe;
 - presentación.
 
-No deben agregarse nuevas funcionalidades salvo que aparezca un error reproducible que afecte la validez del análisis.
+Cualquier cambio futuro al modelo físico debe acompañarse de una prueba de validación nueva y conservar
+V1–V7.
 
 ---
 
