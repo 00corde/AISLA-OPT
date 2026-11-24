@@ -1,0 +1,8 @@
+V1 OK: cálculo manual base
+V2 OK: bisección = solución cerrada
+V3 OK: FVP i=0 y monotonicidad
+V4 OK: k específica por producto con fallback técnico
+V5 OK: parser acepta separadores CRC sin tragarse stock
+V6 OK: reproducción del Ejemplo 3-17 de Çengel
+V7 OK: capacidad usa k específica y conserva condición comercial
+TODAS LAS PRUEBAS V1–V7 APROBADAS

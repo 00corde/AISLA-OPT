@@ -1,0 +1,35 @@
+AISLA-OPT V4.4 — CIERRE DE CÓDIGO
+=================================
+
+Estado: CÓDIGO FUNCIONAL CERRADO.
+No agregar funciones nuevas salvo que aparezca un bug reproducible.
+
+Correcciones de la auditoría final
+- N1: parser CRC acepta puntos, comas, espacios y espacios duros como separadores de miles.
+- N2: actualizar precios web conserva k, densidad, IVA y condición comercial existentes.
+- N3: la factibilidad por capacidad se evalúa con la k específica de cada producto cuando existe.
+- N4: la comparación muestra IVA y condición de precio y advierte si la base tributaria no es homogénea.
+- N5: k de ficha limitada a 0.01–0.20 W/m·K para detectar errores de unidades.
+- N6: se oculta la tabla de límite comercial cuando la restricción de capacidad está apagada y se corrige el mensaje cuando ningún producto cumple.
+- N7: README actualizado, fechas guardadas en ISO, saltos de línea del catálogo normalizados y versiones principales fijadas en requirements.
+
+Validación
+- V1: cálculo manual base.
+- V2: bisección contra solución cerrada.
+- V3: factor de valor presente y monotonicidad.
+- V4: k específica por producto con fallback técnico.
+- V5: formatos de precio CRC.
+- V6: reproducción del Ejemplo 3-17 de Çengel & Ghajar.
+- V7: restricción de capacidad con k específica y conservación de condición comercial.
+
+Resultado de la última ejecución: TODAS LAS PRUEBAS V1–V7 APROBADAS.
+También se verificó por separado que el upsert web actualiza precio/estado/fecha/fuente sin borrar k, densidad, IVA ni condición registrada.
+
+Pendientes que NO requieren modificar el código
+- Cotizaciones comerciales reales y normalización de IVA/condiciones.
+- Caso de estudio definitivo y sensibilidad.
+- Manual final basado en esta versión cerrada.
+- Reporte y presentación.
+
+Nota
+MANUAL_AISLA_OPT_V4_3.md se conserva como base documental previa al cierre. Debe actualizarse después como manual final; no condiciona el funcionamiento de V4.4.
